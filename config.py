@@ -1,0 +1,5 @@
+MYSQL_USER = 'mysql_user'
+MYSQL_PASSWORD = 'mysql_password'
+MYSQL_HOST = 'mysql_host'
+MYSQL_PORT = '3306'
+MYSQL_DATABASE = 'stock'

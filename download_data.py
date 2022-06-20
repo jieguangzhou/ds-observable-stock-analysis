@@ -4,7 +4,7 @@ import re
 import baostock as bs
 import pandas as pd
 from tqdm import tqdm
-
+import sys
 
 RE_CODE_NUM = re.compile("\d+")
 
@@ -60,7 +60,7 @@ def get_zhongzheng500(day=None, only_code=False):
     return df
 
 
-def download_stock(code, start_date=None, end_date=None):
+def download_stock(code, save_folder, start_date=None, end_date=None):
 
     start_date = start_date or "2020-01-01"
     try:
@@ -74,18 +74,20 @@ def download_stock(code, start_date=None, end_date=None):
             )
         )
         return 0
-    folder = os.path.join("data")
-    os.makedirs(folder, exist_ok=True)
-    file_name = os.path.join(folder, "{}.csv".format(code))
+    file_name = os.path.join(save_folder, "{}.csv".format(code))
     df.to_csv(file_name)
     return df
 
 
-def download_all_stocks(start_date=None, end_date=None):
+def download_all_stocks(start_date=None, end_date=None, save_folder='data'):
     codes = get_zhongzheng500(only_code=True)
-    for code in tqdm(codes):
-        download_stock(code)
+    os.makedirs(save_folder, exist_ok=True)
+    for code in tqdm(codes[:50]):
+        download_stock(code, save_folder, start_date, end_date)
 
 
 if __name__ == "__main__":
-    download_all_stocks()
+
+    save_folder = sys.argv[1]
+    download_all_stocks(save_folder=save_folder)
+    print(os.path.abspath(save_folder))
